@@ -5,41 +5,42 @@ import math as mt
 print(cv.__version__)
 print(cv.__file__)
 
-#color_img1 = cv.imread('../image/generalized_hough_demo_01.png')
-color_img1 = cv.imread('../image/Face.png')
-cv.imshow("Switch", color_img1)
+color_img1 = cv.imread('../image/Panel.png')
 img1 = cv.cvtColor(color_img1, cv.COLOR_BGR2GRAY)
-#templ = cv.imread('../image/generalized_hough_demo_02.png', 0)
-templ = cv.imread('../image/Eyes.png', 0)
-cv.imshow("Free Port Template",templ)
-ballard = 0
+color_templ = cv.imread('../image/PanelPort_1.png')
+templ = cv.cvtColor(color_templ, cv.COLOR_BGR2GRAY)
 
+ballard = 1
 if ballard == 1:
     alg = cv.createGeneralizedHoughBallard();
 else:
     alg = cv.createGeneralizedHoughGuil();
 
 alg.setTemplate(templ);
+alg.setVotesThreshold(14)
+alg.setMinDist(30)
 positions, pts = alg.detect(img1)
 
-print(positions)
-#print(pts)
-#[[144. 267.   1.   0.]]
+print("Positions = " + str(positions))
+print("Votes = " + str(pts))
 
 
 for opos in positions:
 	for pos in opos:
-		print(pos)
+		print(str(int(pos[0])) + "|" + str(int(pos[1])))
 		topCornerX = int(pos[0] - 10)
 		topCornerY = int(pos[1] - 10)
 		bottomCornerX = int(pos[0] + 10)
 		bottomCornerY = int(pos[1] + 10)
-		print(topCornerY)
+		#print(topCornerY)
 		#cv.rectangle(color_img1, (topCornerX, topCornerY), (bottomCornerX, bottomCornerY), (0,255,0), 2)
 		cv.circle(color_img1, (pos[0], pos[1]), 10, (0,255,0), 2)
 		#cv.rectangle(color_img1, (10, 10), (20, 20), (0, 255, 0), 2)
 	
+cv.namedWindow('Final',cv.WINDOW_NORMAL)
+cv.resizeWindow('Final', 1500,900)
 cv.imshow("Final", color_img1)
+cv.imwrite('../image/final.png',color_img1)
 k = cv.waitKey(0)
 if k == 27:
 # wait for ESC key to exit
