@@ -6,8 +6,10 @@ print(cv.__version__)
 print(cv.__file__)
 
 color_img1 = cv.imread('../image/Panel.png')
+#color_img1 = cv.imread('../image/Face.jpg')
 img1 = cv.cvtColor(color_img1, cv.COLOR_BGR2GRAY)
 color_templ = cv.imread('../image/PanelPort_1.png')
+#color_templ = cv.imread('../image/Eyes.jpg')
 templ = cv.cvtColor(color_templ, cv.COLOR_BGR2GRAY)
 
 ballard = 1
@@ -17,8 +19,8 @@ else:
     alg = cv.createGeneralizedHoughGuil();
 
 alg.setTemplate(templ);
-alg.setVotesThreshold(14)
-alg.setMinDist(30)
+alg.setVotesThreshold(10)
+alg.setMinDist(80)
 positions, pts = alg.detect(img1)
 
 print("Positions = " + str(positions))
